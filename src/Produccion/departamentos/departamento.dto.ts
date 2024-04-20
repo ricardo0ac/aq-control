@@ -15,6 +15,5 @@ export class UpdateDepartamentoDto {
   nombre: string;
 
   @IsString()
-  @IsOptional()
   estatus: string;
 }

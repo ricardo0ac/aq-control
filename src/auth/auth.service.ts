@@ -36,7 +36,7 @@ export class AuthService {
       });
 
       const existingName = await this.userRepository.findOne({
-        where: { username },
+        where: { nombre },
       });
 
       if (existingUser) {

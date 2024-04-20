@@ -13,8 +13,8 @@ export class Cliente {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: 'text',
+  @Column('text', {
+    unique: true,
   })
   nombre: string;
 

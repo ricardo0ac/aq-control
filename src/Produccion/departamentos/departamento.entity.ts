@@ -15,7 +15,9 @@ export class Departamento {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('text', {
+    unique: true,
+  })
   nombre: string;
 
   @Column({ default: 'Activo' })

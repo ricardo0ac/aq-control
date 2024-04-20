@@ -10,7 +10,6 @@ import { Defecto } from '../defectos/defecto.entity';
 import { Lote } from '../lotes/lote.entity';
 
 @Entity()
-@Unique(['nombre'])
 export class Departamento {
   @PrimaryGeneratedColumn()
   id: number;

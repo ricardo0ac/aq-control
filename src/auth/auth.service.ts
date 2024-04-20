@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -30,12 +31,11 @@ export class AuthService {
     try {
       const { username, password, ...userData } = createUserDto;
 
-      // Verificar si el nombre de usuario ya existe
       const existingUser = await this.userRepository.findOne({
         where: { username },
       });
       if (existingUser) {
-        throw new Error(
+        throw new ConflictException(
           'El nombre de usuario ya existe. Por favor, elija otro nombre de usuario.',
         );
       }
@@ -54,12 +54,16 @@ export class AuthService {
       };
       // TODO: Retornar el JWT de acceso
     } catch (error) {
-      throw new Error(
-        'Error al crear el usuario. Por favor, inténtelo de nuevo.',
-      ); // Mensaje genérico en caso de otro tipo de error
+      // Si el error es del tipo ConflictException, significa que el nombre de usuario ya existe
+      if (error instanceof ConflictException) {
+        throw error; // Relanza el mismo error con el mensaje personalizado
+      } else {
+        throw new Error(
+          'Error al crear el usuario. Por favor, inténtelo de nuevo.',
+        ); // Mensaje genérico en caso de otro tipo de error
+      }
     }
   }
-
   async login(loginUserDto: LoginUserDto) {
     const { password, username } = loginUserDto;
 

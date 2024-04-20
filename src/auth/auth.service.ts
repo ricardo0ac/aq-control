@@ -29,12 +29,21 @@ export class AuthService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const { username, password, ...userData } = createUserDto;
+      const { username, password, nombre, ...userData } = createUserDto;
 
       const existingUser = await this.userRepository.findOne({
         where: { username },
       });
+
+      const existingName = await this.userRepository.findOne({
+        where: { username },
+      });
+
       if (existingUser) {
+        throw new ConflictException(
+          'Username ya existe. Por favor, elija otro username.',
+        );
+      } else if (existingName) {
         throw new ConflictException(
           'El nombre de usuario ya existe. Por favor, elija otro nombre de usuario.',
         );

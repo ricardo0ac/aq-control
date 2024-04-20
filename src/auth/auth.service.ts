@@ -28,7 +28,17 @@ export class AuthService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const { password, ...userData } = createUserDto;
+      const { username, password, ...userData } = createUserDto;
+
+      // Verificar si el nombre de usuario ya existe
+      const existingUser = await this.userRepository.findOne({
+        where: { username },
+      });
+      if (existingUser) {
+        throw new Error(
+          'El nombre de usuario ya existe. Por favor, elija otro nombre de usuario.',
+        );
+      }
 
       const user = this.userRepository.create({
         ...userData,
@@ -44,7 +54,9 @@ export class AuthService {
       };
       // TODO: Retornar el JWT de acceso
     } catch (error) {
-      this.handleDBErrors(error);
+      throw new Error(
+        'Error al crear el usuario. Por favor, inténtelo de nuevo.',
+      ); // Mensaje genérico en caso de otro tipo de error
     }
   }
 

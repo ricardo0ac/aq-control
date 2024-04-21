@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -29,25 +28,7 @@ export class AuthService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const { username, password, nombre, ...userData } = createUserDto;
-
-      const existingUser = await this.userRepository.findOne({
-        where: { username },
-      });
-
-      const existingName = await this.userRepository.findOne({
-        where: { nombre },
-      });
-
-      if (existingUser) {
-        throw new ConflictException(
-          'Username ya existe. Por favor, elija otro username.',
-        );
-      } else if (existingName) {
-        throw new ConflictException(
-          'El nombre de usuario ya existe. Por favor, elija otro nombre de usuario.',
-        );
-      }
+      const { password, ...userData } = createUserDto;
 
       const user = this.userRepository.create({
         ...userData,
@@ -63,16 +44,10 @@ export class AuthService {
       };
       // TODO: Retornar el JWT de acceso
     } catch (error) {
-      // Si el error es del tipo ConflictException, significa que el nombre de usuario ya existe
-      if (error instanceof ConflictException) {
-        throw error; // Relanza el mismo error con el mensaje personalizado
-      } else {
-        throw new Error(
-          'Error al crear el usuario. Por favor, inténtelo de nuevo.',
-        ); // Mensaje genérico en caso de otro tipo de error
-      }
+      this.handleDBErrors(error);
     }
   }
+
   async login(loginUserDto: LoginUserDto) {
     const { password, username } = loginUserDto;
 

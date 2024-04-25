@@ -21,7 +21,9 @@ export class EstiloService {
       where: { nombre },
     });
     if (existingEstilo) {
-      throw new ConflictException('Ya existe un estilo con este nombre.');
+      throw new ConflictException(
+        'El nombre del estilo ya existe. Por favor, elija otro nombre.',
+      );
     }
     const estilo = this.estiloRepository.create(createEstiloDto);
     return await this.estiloRepository.save(estilo);

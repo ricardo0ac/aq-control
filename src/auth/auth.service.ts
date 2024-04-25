@@ -52,7 +52,7 @@ export class AuthService {
     const { password, username } = loginUserDto;
 
     const user = await this.userRepository.findOne({
-      where: { username },
+      where: { username, isActive: true },
       select: {
         username: true,
         password: true,

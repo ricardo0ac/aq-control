@@ -23,7 +23,9 @@ export class ClienteService {
       where: { nombre },
     });
     if (existingCliente) {
-      throw new ConflictException('Ya existe un cliente con este nombre.');
+      throw new ConflictException(
+        'El nombre del cliente ya existe. Por favor, elija otro nombre.',
+      );
     }
 
     // Si no existe, crea el cliente

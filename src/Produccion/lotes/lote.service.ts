@@ -10,6 +10,8 @@ import { ClienteService } from '../clientes/cliente.service';
 import { DepartamentoService } from '../departamentos/departamento.service';
 import { User } from 'src/auth/entities/user.entity';
 import { AuthService } from 'src/auth/auth.service';
+import { EventsGateway } from 'src/gateways/events.gateway';
+
 // Importa el servicio de defectos
 
 @Injectable()
@@ -21,6 +23,7 @@ export class LoteService {
     private readonly clienteService: ClienteService,
     private readonly usuarioService: AuthService,
     private readonly departamentoService: DepartamentoService, // Inyecta el servicio de defectos
+    private readonly eventsGateway: EventsGateway,
   ) {}
 
   async create(createLoteDto: CreateLoteDto): Promise<Lote> {
@@ -60,7 +63,9 @@ export class LoteService {
     );
     lote.departamento = departamento;
 
-    return await this.loteRepository.save(lote);
+    const savedLote = await this.loteRepository.save(lote);
+    this.eventsGateway.sendNotification('Lote creado exitosamente!');
+    return savedLote;
   }
 
   async findAll(): Promise<Lote[]> {

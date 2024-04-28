@@ -12,6 +12,7 @@ import { EstiloService } from '../estilos/estilo.service';
 import { DefectoService } from '../defectos/defecto.service';
 import { ClienteService } from '../clientes/cliente.service';
 import { DepartamentoService } from '../departamentos/departamento.service';
+import { EventsGateway } from 'src/gateways/events.gateway';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { DepartamentoService } from '../departamentos/departamento.service';
     EstiloModule,
     ClienteModule,
     DepartamentoModule,
+    EventsGateway,
   ],
   providers: [LoteService],
   controllers: [LoteController],

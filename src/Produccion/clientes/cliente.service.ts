@@ -18,7 +18,6 @@ export class ClienteService {
   async create(createClienteDto: CreateClienteDto): Promise<Cliente> {
     const { nombre } = createClienteDto;
 
-    // Verifica si ya existe un cliente con el mismo nombre
     const existingCliente = await this.clienteRepository.findOne({
       where: { nombre },
     });
